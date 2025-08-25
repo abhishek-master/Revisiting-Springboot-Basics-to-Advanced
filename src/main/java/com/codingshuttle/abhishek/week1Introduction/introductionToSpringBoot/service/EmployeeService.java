@@ -36,4 +36,15 @@ public class EmployeeService {
         return modelMapper.map(savedEmployee, EmployeeDTO.class);
 
     }
+
+    public EmployeeDTO updateEmployee(EmployeeDTO employeeData, Integer employeeId) {
+        EmployeeEntity employeeEntity = modelMapper.map(employeeData, EmployeeEntity.class);
+        employeeEntity.setId(employeeId);
+        employeeRepo.save(employeeEntity);
+        return modelMapper.map(employeeEntity, EmployeeDTO.class);
+    }
+
+    public void deleteEmployee(Integer employeeId) {
+        employeeRepo.deleteById(employeeId);
+    }
 }

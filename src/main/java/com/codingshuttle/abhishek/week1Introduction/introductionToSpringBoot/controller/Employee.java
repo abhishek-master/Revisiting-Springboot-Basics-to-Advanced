@@ -20,15 +20,25 @@ public class Employee {
         this.employeeService = employeeService;
     }
 
+    @PutMapping("/{employeeId}")
+    EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employeeData, @PathVariable Integer employeeId) {
+       return  employeeService.updateEmployee(employeeData, employeeId);
+    }
+
+//    @PatchMapping("/{employeeId}")
+//    EmployeeDTO patchEmployee(@RequestBody Object data, @PathVariable Integer employeeId) {
+//
+//    }
+
+    @DeleteMapping("/{employeeId}")
+    void deleteEmployee(@PathVariable Integer employeeId) {
+        employeeService.deleteEmployee(employeeId);
+    }
+
     @GetMapping("/{employeeId}")
     Optional<EmployeeDTO> getEmployee (@PathVariable  Integer employeeId) {
         System.out.println("getEmployee "+employeeId);
        return employeeService.getById(employeeId);
-    }
-
-    @GetMapping("/")
-    String getIdViaParams(@RequestParam(required = true) Integer employeeId, @RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName) {
-        return "This is response : " + employeeId + " and " + firstName + " and " + lastName ;
     }
 
     @PostMapping("/")

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Setter
 public class EmployeeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id ;
     private Integer age;
     private String name;
