@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class EmployeeService {
     EmployeeRepo employeeRepo;
-    ModelMapper modelMapper;
+    final ModelMapper modelMapper;
     public EmployeeService(EmployeeRepo employeeRepo, ModelMapper modelMapper) {
         this.employeeRepo = employeeRepo;
         this.modelMapper = modelMapper;
@@ -20,7 +20,20 @@ public class EmployeeService {
 
     public Optional<EmployeeDTO> getById(Integer employeeId) {
         Optional<EmployeeEntity> toReturnEntity = employeeRepo.findById(employeeId);
-        EmployeeDTO employeeDTO = modelMapper.map(toReturnEntity, EmployeeDTO.class);
+        System.out.println("employeeEntity : " + toReturnEntity);
+        EmployeeDTO employeeDTO = modelMapper.map(toReturnEntity.orElse(null), EmployeeDTO.class);
+
+        /* Importance of .orElse() or .get() is
+        to get the Value from optional as
+        then only you can map using model mapper. */
+
         return  Optional.of(employeeDTO) ;
+    }
+
+    public EmployeeDTO saveEmployee(EmployeeDTO toSaveEntity) {
+        EmployeeEntity employeeEntity = modelMapper.map(toSaveEntity, EmployeeEntity.class);
+        EmployeeEntity savedEmployee = employeeRepo.save(employeeEntity);
+        return modelMapper.map(savedEmployee, EmployeeDTO.class);
+
     }
 }

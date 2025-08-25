@@ -14,7 +14,6 @@ import java.util.Optional;
 @RequestMapping(path="/employee")
 public class Employee {
 
-    //EmployeeRepo  employeeRepo;
     EmployeeService employeeService ;
 
     public Employee(EmployeeService employeeService) {
@@ -23,20 +22,17 @@ public class Employee {
 
     @GetMapping("/{employeeId}")
     Optional<EmployeeDTO> getEmployee (@PathVariable  Integer employeeId) {
+        System.out.println("getEmployee "+employeeId);
        return employeeService.getById(employeeId);
-
     }
 
     @GetMapping("/")
     String getIdViaParams(@RequestParam(required = true) Integer employeeId, @RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName) {
         return "This is response : " + employeeId + " and " + firstName + " and " + lastName ;
     }
-//    @GetMapping("/getEmployeesById/{age}")
-//    Optional<EmployeeEntity> getAllEmployees(@PathVariable  Integer age) {
-//        return employeeRepo.findById(age);
-//    }
-//    @PostMapping("/")
-//    EmployeeEntity saveEmployee(@RequestBody EmployeeEntity employeeDTO) {
-//        return employeeRepo.save(employeeDTO);
-//    }
+
+    @PostMapping("/")
+    EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeData) {
+        return employeeService.saveEmployee(employeeData);
+    }
 }

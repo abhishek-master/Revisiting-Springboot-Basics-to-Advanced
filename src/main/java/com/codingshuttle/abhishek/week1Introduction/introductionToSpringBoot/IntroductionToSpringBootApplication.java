@@ -9,17 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class IntroductionToSpringBootApplication { //implements CommandLineRunner
 
-//    @Autowired
-//    DB db;
 	public static void main(String[] args) {
 		SpringApplication.run(IntroductionToSpringBootApplication.class, args);
         //obj.eatApple();
 
 
 	}
-
-//    @Override
-//    public void run(String... args) throws Exception {
-//        System.out.println(db.getData());
-//    }
 }

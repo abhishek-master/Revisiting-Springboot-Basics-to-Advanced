@@ -21,4 +21,9 @@ public class EmployeeEntity {
     private String name;
     private String address;
     private Boolean isActive ;
+
+    @Override
+    public String toString() {
+        return " { " + "id: " + id + " age: " + age + " name: " + name + " address: " + address + " isActive: " + isActive + " }";
+    }
 }
