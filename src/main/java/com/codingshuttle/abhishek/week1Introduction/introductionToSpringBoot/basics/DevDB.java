@@ -1,7 +1,6 @@
-package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot;
+package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.basics;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 @Service

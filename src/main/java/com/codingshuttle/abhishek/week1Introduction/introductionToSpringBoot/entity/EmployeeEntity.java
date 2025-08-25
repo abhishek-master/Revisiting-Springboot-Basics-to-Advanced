@@ -1,0 +1,24 @@
+package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "employee")
+@Getter
+@Setter
+public class EmployeeEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id ;
+    private Integer age;
+    private String name;
+    private String address;
+    private Boolean isActive ;
+}
