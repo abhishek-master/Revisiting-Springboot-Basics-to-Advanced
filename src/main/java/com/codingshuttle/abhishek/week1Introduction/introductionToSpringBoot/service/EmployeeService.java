@@ -5,7 +5,11 @@ import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.ent
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.repository.EmployeeRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -44,7 +48,30 @@ public class EmployeeService {
         return modelMapper.map(employeeEntity, EmployeeDTO.class);
     }
 
-    public void deleteEmployee(Integer employeeId) {
+    public boolean deleteEmployee(Integer employeeId) {
+        boolean exists = employeeRepo.existsById(employeeId);
+        if(exists){
         employeeRepo.deleteById(employeeId);
+        }
+        return exists ;
+    }
+
+    public List<EmployeeDTO> getAllEmployees() {
+        List<EmployeeEntity> employeeEntities = employeeRepo.findAll();
+        return employeeEntities.stream()
+                                    .map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDTO.class)).toList();
+    }
+
+    public EmployeeDTO updatePartialEmployeeById(Map<String, Object> updates, Integer employeeId) {
+        boolean isExists =  employeeRepo.existsById(employeeId);
+        if(!isExists){return null ;}
+        EmployeeEntity employeeEntity = employeeRepo.findById(employeeId).get();
+        updates.forEach((field, value) -> {
+            Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class, field);
+            fieldToBeUpdated.setAccessible(true);
+            ReflectionUtils.setField(fieldToBeUpdated, employeeEntity, value);
+        });
+        return modelMapper.map(employeeRepo.save(employeeEntity),  EmployeeDTO.class);
     }
 }
+
