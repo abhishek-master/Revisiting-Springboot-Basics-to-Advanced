@@ -2,6 +2,7 @@ package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.co
 
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.DTO.EmployeeDTO;
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class Employee {
 
 
     @PutMapping("/{employeeId}")
-    ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO employeeData, @PathVariable Integer employeeId) {
+    ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody @Valid EmployeeDTO employeeData, @PathVariable Integer employeeId) {
        EmployeeDTO employeeDTO = employeeService.updateEmployee(employeeData, employeeId);
        if(employeeDTO!=null){
            return ResponseEntity.ok(employeeDTO);
@@ -66,7 +67,7 @@ public class Employee {
     }
 
     @PostMapping("/")
-    ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO employeeData) {
+    ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody @Valid EmployeeDTO employeeData) {
         EmployeeDTO employeeDTO = employeeService.saveEmployee(employeeData);
         return new ResponseEntity<>(employeeDTO, HttpStatus.CREATED);
     }

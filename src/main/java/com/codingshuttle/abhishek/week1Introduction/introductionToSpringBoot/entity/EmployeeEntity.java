@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor
@@ -20,6 +21,11 @@ public class EmployeeEntity {
     private String name;
     private String address;
     private Boolean isActive ;
+    private String email ;
+    private Double salary;
+    private String role;
+    private LocalDate dateOfJoining ;
+
 
     @Override
     public String toString() {
