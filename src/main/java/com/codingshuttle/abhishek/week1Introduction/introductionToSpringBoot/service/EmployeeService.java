@@ -25,13 +25,7 @@ public class EmployeeService {
     public Optional<EmployeeDTO> getById(Integer employeeId) {
         Optional<EmployeeEntity> toReturnEntity = employeeRepo.findById(employeeId);
         System.out.println("employeeEntity : " + toReturnEntity);
-        EmployeeDTO employeeDTO = modelMapper.map(toReturnEntity.orElse(null), EmployeeDTO.class);
-
-        /* Importance of .orElse() or .get() is
-        to get the Value from optional as
-        then only you can map using model mapper. */
-
-        return  Optional.of(employeeDTO) ;
+        return toReturnEntity.map(toReturnEntity1 -> modelMapper.map(toReturnEntity1, EmployeeDTO.class)) ;
     }
 
     public EmployeeDTO saveEmployee(EmployeeDTO toSaveEntity) {
@@ -42,13 +36,17 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployee(EmployeeDTO employeeData, Integer employeeId) {
-        EmployeeEntity employeeEntity = modelMapper.map(employeeData, EmployeeEntity.class);
-        employeeEntity.setId(employeeId);
-        employeeRepo.save(employeeEntity);
-        return modelMapper.map(employeeEntity, EmployeeDTO.class);
+        boolean isExist = employeeRepo.existsById(employeeId);
+        if (isExist) {
+            EmployeeEntity employeeEntity = modelMapper.map(employeeData, EmployeeEntity.class);
+            employeeEntity.setId(employeeId);
+            employeeRepo.save(employeeEntity);
+            return modelMapper.map(employeeEntity, EmployeeDTO.class);
+        }
+        return null;
     }
 
-    public boolean deleteEmployee(Integer employeeId) {
+    public Boolean deleteEmployee(Integer employeeId) {
         boolean exists = employeeRepo.existsById(employeeId);
         if(exists){
         employeeRepo.deleteById(employeeId);
