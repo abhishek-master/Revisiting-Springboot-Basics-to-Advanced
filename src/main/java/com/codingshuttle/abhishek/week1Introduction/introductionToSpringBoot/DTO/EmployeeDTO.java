@@ -1,5 +1,6 @@
 package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.DTO;
 
+import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.annotations.EmployeeRoleValidation;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,8 @@ public class EmployeeDTO {
     private Integer age;
 
     @NotNull
-    @Pattern(regexp = "^(USER|ADMIN)$", message = "Role for an employee can be either ADMIN or USER")
+    //@Pattern(regexp = "^(USER|ADMIN)$", message = "Role for an employee can be either ADMIN or USER")
+    @EmployeeRoleValidation
     private String role;
 
     @NotBlank(message = "Name needs a valid value")
