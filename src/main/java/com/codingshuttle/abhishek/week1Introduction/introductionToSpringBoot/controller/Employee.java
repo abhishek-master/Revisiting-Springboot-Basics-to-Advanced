@@ -2,6 +2,9 @@ package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.co
 
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.DTO.EmployeeDTO;
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.service.EmployeeService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,21 +15,27 @@ import java.util.Optional;
 @RequestMapping(path="/employee")
 public class Employee {
 
+    private final ModelMapper modelMapper;
     EmployeeService employeeService ;
 
-    public Employee(EmployeeService employeeService) {
+    public Employee(EmployeeService employeeService, ModelMapper modelMapper) {
         this.employeeService = employeeService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/")
-    List<EmployeeDTO> getAllEmployees (){
-        return employeeService.getAllEmployees();
+    ResponseEntity<List<EmployeeDTO>> getAllEmployees (){
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
 
     @PutMapping("/{employeeId}")
-    EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employeeData, @PathVariable Integer employeeId) {
-       return  employeeService.updateEmployee(employeeData, employeeId);
+    ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO employeeData, @PathVariable Integer employeeId) {
+       EmployeeDTO employeeDTO = employeeService.updateEmployee(employeeData, employeeId);
+       if(employeeDTO!=null){
+           return ResponseEntity.ok(employeeDTO);
+       }
+       return ResponseEntity.notFound().build();
     }
 
     /*
@@ -34,23 +43,31 @@ public class Employee {
     * https://www.oracle.com/technical-resources/articles/java/javareflection.html
     * */
     @PatchMapping("/{employeeId}")
-    EmployeeDTO patchEmployee(@RequestBody Map<String, Object> updates, @PathVariable Integer employeeId) {
-        return employeeService.updatePartialEmployeeById(updates, employeeId);
+    ResponseEntity<EmployeeDTO> patchEmployee(@RequestBody Map<String, Object> updates, @PathVariable Integer employeeId) {
+        EmployeeDTO employeeDTO =  employeeService.updatePartialEmployeeById(updates, employeeId);
+        if(employeeDTO!=null){
+            return ResponseEntity.ok(employeeDTO);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{employeeId}")
-    boolean deleteEmployee(@PathVariable Integer employeeId) {
-        return employeeService.deleteEmployee(employeeId);
+    ResponseEntity<Boolean> deleteEmployee(@PathVariable Integer employeeId) {
+        return employeeService.deleteEmployee(employeeId) ? ResponseEntity.noContent().build(): ResponseEntity.notFound().build();
     }
 
     @GetMapping("/{employeeId}")
-    Optional<EmployeeDTO> getEmployee (@PathVariable  Integer employeeId) {
+    ResponseEntity<EmployeeDTO> getEmployee (@PathVariable  Integer employeeId) {
         System.out.println("getEmployee "+employeeId);
-       return employeeService.getById(employeeId);
+       Optional<EmployeeDTO> employeeDTO =  employeeService.getById(employeeId);
+       return employeeDTO
+               .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
+               .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/")
-    EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeData) {
-        return employeeService.saveEmployee(employeeData);
+    ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO employeeData) {
+        EmployeeDTO employeeDTO = employeeService.saveEmployee(employeeData);
+        return new ResponseEntity<>(employeeDTO, HttpStatus.CREATED);
     }
 }
