@@ -2,6 +2,7 @@ package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.se
 
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.DTO.EmployeeDTO;
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.entity.EmployeeEntity;
+import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.exceptions.ResourceNotFound;
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.repository.EmployeeRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,6 @@ public class EmployeeService {
 
     public Optional<EmployeeDTO> getById(Integer employeeId) {
         Optional<EmployeeEntity> toReturnEntity = employeeRepo.findById(employeeId);
-        System.out.println("employeeEntity : " + toReturnEntity);
         return toReturnEntity.map(toReturnEntity1 -> modelMapper.map(toReturnEntity1, EmployeeDTO.class)) ;
     }
 
@@ -36,8 +36,7 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployee(EmployeeDTO employeeData, Integer employeeId) {
-        boolean isExist = employeeRepo.existsById(employeeId);
-        if (isExist) {
+        if (employeeExists(employeeId)) {
             EmployeeEntity employeeEntity = modelMapper.map(employeeData, EmployeeEntity.class);
             employeeEntity.setId(employeeId);
             employeeRepo.save(employeeEntity);
@@ -47,11 +46,19 @@ public class EmployeeService {
     }
 
     public Boolean deleteEmployee(Integer employeeId) {
-        boolean exists = employeeRepo.existsById(employeeId);
-        if(exists){
+        if(employeeExists(employeeId)){
         employeeRepo.deleteById(employeeId);
+        return true ;
         }
-        return exists ;
+        return false;
+
+    }
+
+    public boolean employeeExists (int id){
+        if(!employeeRepo.existsById(id)){
+            throw  new ResourceNotFound("No Employee found for id: " + id) ;
+        }
+        return true ;
     }
 
     public List<EmployeeDTO> getAllEmployees() {
@@ -61,15 +68,16 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updatePartialEmployeeById(Map<String, Object> updates, Integer employeeId) {
-        boolean isExists =  employeeRepo.existsById(employeeId);
-        if(!isExists){return null ;}
-        EmployeeEntity employeeEntity = employeeRepo.findById(employeeId).get();
-        updates.forEach((field, value) -> {
-            Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class, field);
-            fieldToBeUpdated.setAccessible(true);
-            ReflectionUtils.setField(fieldToBeUpdated, employeeEntity, value);
-        });
-        return modelMapper.map(employeeRepo.save(employeeEntity),  EmployeeDTO.class);
+        if(employeeExists(employeeId)) {
+            EmployeeEntity employeeEntity = employeeRepo.findById(employeeId).get();
+            updates.forEach((field, value) -> {
+                Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class, field);
+                fieldToBeUpdated.setAccessible(true);
+                ReflectionUtils.setField(fieldToBeUpdated, employeeEntity, value);
+            });
+            return modelMapper.map(employeeRepo.save(employeeEntity),  EmployeeDTO.class);
+        }
+        return null ;
     }
 }
 
