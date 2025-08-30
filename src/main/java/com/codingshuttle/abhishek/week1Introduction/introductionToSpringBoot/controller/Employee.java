@@ -1,6 +1,7 @@
 package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.controller;
 
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.DTO.EmployeeDTO;
+import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.exceptions.ResourceNotFound;
 import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -63,7 +65,7 @@ public class Employee {
        Optional<EmployeeDTO> employeeDTO =  employeeService.getById(employeeId);
        return employeeDTO
                .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
-               .orElse(ResponseEntity.notFound().build());
+               .orElseThrow(() -> new ResourceNotFound("No Employee found for id; " + employeeId));
     }
 
     @PostMapping("/")
