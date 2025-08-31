@@ -2,6 +2,7 @@ package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.ad
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @Builder
 public class ApiError {
     String message;
-    String status;
+    HttpStatus status;
     List<String> errors ;
 
 }
