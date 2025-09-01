@@ -1,12 +1,12 @@
 # 🌱 Spring Boot & Microservices Mastery – Learning & Projects
 
-This repository contains code, projects, and experiments created while following a comprehensive backend development course covering **Spring Boot**, **Spring Framework Core**, **Microservices**, **Cloud Deployment**, **Databases**, **Messaging Systems**, **Security**, and **DevOps tools**.
+This repository contains code, projects, and experiments created while revising and learning comprehensive backend development stuff, covering **Spring Boot**, **Spring Framework Core**, **Microservices**, **Cloud Deployment**, **Databases**, **Messaging Systems**, **Security**, and **DevOps tools**.
 
 The journey starts from **Spring basics** and moves step-by-step through **advanced enterprise-level backend development concepts**.
 
 ---
 
-## 📚 Course Roadmap (Topics Covered)
+## 📚 Learning and Revising Roadmap (Topics Covered)
 
 ### Core Spring Framework
 - Spring IoC Container & Beans
