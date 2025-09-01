@@ -8,11 +8,11 @@
 		<version>3.5.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.codingshuttle.abhishek.week1Introduction</groupId>
+	<groupId>com.abhishek.revisiting</groupId>
 	<artifactId>introductionToSpringBoot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>introductionToSpringBoot</name>
-	<description>week1Intorduction</description>
+	<description>revisiting_spring_boot_basics</description>
 	<url/>
 	<licenses>
 		<license/>

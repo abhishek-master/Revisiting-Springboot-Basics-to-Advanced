@@ -1,4 +1,4 @@
-package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.entity;
+package com.abhishek.revisiting.introductionToSpringBoot.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

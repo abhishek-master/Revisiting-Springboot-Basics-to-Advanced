@@ -1,4 +1,4 @@
-package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.basics;
+package com.abhishek.revisiting.introductionToSpringBoot.basics;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

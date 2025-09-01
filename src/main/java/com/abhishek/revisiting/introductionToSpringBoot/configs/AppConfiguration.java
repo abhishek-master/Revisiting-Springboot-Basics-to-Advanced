@@ -1,4 +1,4 @@
-package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.configs;
+package com.abhishek.revisiting.introductionToSpringBoot.configs;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

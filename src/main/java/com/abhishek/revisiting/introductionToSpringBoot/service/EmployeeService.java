@@ -1,9 +1,9 @@
-package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.service;
+package com.abhishek.revisiting.introductionToSpringBoot.service;
 
-import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.DTO.EmployeeDTO;
-import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.entity.EmployeeEntity;
-import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.exceptions.ResourceNotFound;
-import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.repository.EmployeeRepo;
+import com.abhishek.revisiting.introductionToSpringBoot.DTO.EmployeeDTO;
+import com.abhishek.revisiting.introductionToSpringBoot.entity.EmployeeEntity;
+import com.abhishek.revisiting.introductionToSpringBoot.exceptions.ResourceNotFound;
+import com.abhishek.revisiting.introductionToSpringBoot.repository.EmployeeRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;

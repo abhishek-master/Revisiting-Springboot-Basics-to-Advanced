@@ -1,4 +1,4 @@
-package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot;
+package com.abhishek.revisiting.introductionToSpringBoot;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

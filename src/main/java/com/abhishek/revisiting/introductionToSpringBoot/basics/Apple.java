@@ -1,4 +1,4 @@
-package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.basics;
+package com.abhishek.revisiting.introductionToSpringBoot.basics;
 
 public class Apple { //Say some third party library
     String color ;

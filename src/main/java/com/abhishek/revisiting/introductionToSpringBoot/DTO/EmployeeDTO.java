@@ -1,6 +1,6 @@
-package com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.DTO;
+package com.abhishek.revisiting.introductionToSpringBoot.DTO;
 
-import com.codingshuttle.abhishek.week1Introduction.introductionToSpringBoot.annotations.EmployeeRoleValidation;
+import com.abhishek.revisiting.introductionToSpringBoot.annotations.EmployeeRoleValidation;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
