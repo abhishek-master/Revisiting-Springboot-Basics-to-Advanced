@@ -1,16 +1,20 @@
 package com.revisiting.jpa.hibernate.spring_data_jpa.repositories;
 
 import com.revisiting.jpa.hibernate.spring_data_jpa.entities.ProductEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     List<ProductEntity> findByTitle(String title);
+    List<ProductEntity> findByTitle(String title, Sort sort);
     List<ProductEntity> findByCreatedAtAfter(LocalDateTime after);
 
     List<ProductEntity> findByQuantityAndPrice(Integer quantity, BigDecimal price);
@@ -31,4 +35,35 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     //See how I changed the type for the List to string as title is of the type string
     @Query("select e.title from ProductEntity e where e.title ilike :title and e.quantity > :quantity")
     List<String> findAllTitleByTitleAndQuantity(String title, int quantity);
+
+    List<ProductEntity> findByTitleOrderByPrice(String title);
+
+    List<ProductEntity> findAllContainingTitleOrderByTitle(String title);
+
+    List<ProductEntity> findAllByTitleLike(String title);
+
+    List<ProductEntity> findByTitleOrderByTitleAsc(String queryString);
+
+    /*
+    * How to use "Sort" in the JPA method's parameter:
+    * 2 ways :
+    * Sort sort = Sort.by(Sort.Direction.ASC, sortField);
+    * Say some entities have same comparing value, like I am comparing by title and more than one items has same name
+    * In that case we can chain with parameters, like if they are smae then which parameter can be used to compare
+    *
+    * */
+    Sort sort = Sort.by(Sort.Direction.DESC, "sortField");
+    Sort sortChaining = Sort.by(Sort.Order.asc("field_1"), Sort.Order.desc("field2"));
+    //And use it like below;
+    /*
+    * List<ProductEntity> getSortedList(String str){
+    * return productRepository.findAll(Sort.Order.desc("fieldName"))
+    *
+    * }
+    * */
+
+
+
+
+
 }
