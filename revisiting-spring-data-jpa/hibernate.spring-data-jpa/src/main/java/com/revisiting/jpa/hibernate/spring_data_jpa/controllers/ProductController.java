@@ -2,8 +2,10 @@ package com.revisiting.jpa.hibernate.spring_data_jpa.controllers;
 
 import com.revisiting.jpa.hibernate.spring_data_jpa.entities.ProductEntity;
 import com.revisiting.jpa.hibernate.spring_data_jpa.service.ProductService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Parameter;
 import java.util.List;
 
 @RestController
@@ -28,9 +30,10 @@ public class ProductController {
         return productService.getSortedList(sortBy);
     }
 
-    @GetMapping("/getSortedBySku")
-    public List<ProductEntity> getListSortedBySku (@RequestParam(defaultValue = "hi") String help) {
-        return productService.getSortedListBySku();
+    @GetMapping("/paginatedAndSorted")
+    public List<ProductEntity> getPaginatedAndSortedList (@RequestParam(defaultValue="kure") String s, @RequestParam(defaultValue="0") Integer pageNumber){
+        return productService.getPaginatedAndSortedList(s, pageNumber);
     }
+
 
 }
