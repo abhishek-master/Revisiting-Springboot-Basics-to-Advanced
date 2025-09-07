@@ -2,10 +2,7 @@ package com.revisiting.jpa.hibernate.spring_data_jpa.controllers;
 
 import com.revisiting.jpa.hibernate.spring_data_jpa.entities.ProductEntity;
 import com.revisiting.jpa.hibernate.spring_data_jpa.service.ProductService;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-
-import java.lang.reflect.Parameter;
 import java.util.List;
 
 @RestController
