@@ -101,7 +101,7 @@ If `doSomethingOtherClass()` deletes entity `t`:
 
 | Concept                     | Description                                                        |
 |-----------------------------|--------------------------------------------------------------------|
-| Persistence Context          | Manages entity state, scoped to a transaction in Spring.          |
+| Persistence Context         | Manages entity state, scoped to a transaction in Spring.          |
 | Managed Entity              | Tracked and persisted automatically in a persistence context.      |
 | Detached Entity             | Not tracked, requires merging to persist changes.                   |
 | Transient Entity / Field    | Not persisted to the DB; marked with `@Transient` or `transient`.  |
