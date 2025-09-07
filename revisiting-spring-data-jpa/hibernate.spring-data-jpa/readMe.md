@@ -57,22 +57,24 @@ This document elaborates key concepts regarding JPA persistence context, entity 
 ## Nested Transactions and Entity Behavior Example
 
 class A {
-@Transactional
-public List<Something> doSomething () {
-temp t = new temp();
-t.setProperty();
-t.set(); // update entity
-temp modified_t = doSomethingOtherClass(t);
-modified_t.flush(); // flush changes in outer transaction
-}
+    @Transactional
+    public List<Something> doSomething() {
+        temp t = new temp();
+        t.setProperty();
+        t.set(); // update entity
+
+        temp modified_t = doSomethingOtherClass(t);
+        modified_t.flush(); // flush changes in outer transaction
+    }
 }
 
 class B {
-@Transactional(propagation = Propagation.REQUIRES_NEW)
-public temp doSomethingOtherClass(temp t) {
-// modify and save entity in a new transaction
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public temp doSomethingOtherClass(temp t) {
+        // modify and save entity in a new transaction
+    }
 }
-}
+
 
 ### What happens?
 
