@@ -55,7 +55,7 @@ This document elaborates key concepts regarding JPA persistence context, entity 
 ---
 
 ## Nested Transactions and Entity Behavior Example
-
+```Java
 class A {
     @Transactional
     public List<Something> doSomething() {
@@ -74,7 +74,7 @@ class B {
         // modify and save entity in a new transaction
     }
 }
-
+```
 
 ### What happens?
 
