@@ -29,4 +29,6 @@ When the controller serializes the response, only these exposed interface method
     //Class Projection or Constructor Projection
     @Query("Select new com.revisiting.jpa.hibernate.spring_data_jpa.dto.CDepartmentDTO(d.id, d.name, d.hod) from DepartmentEntity d where d.id = :id")
     CDepartmentDTO getIdInterfaceConcrete(Integer id);
+
+
 }
