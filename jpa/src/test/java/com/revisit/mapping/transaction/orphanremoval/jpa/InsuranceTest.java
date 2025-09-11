@@ -20,8 +20,8 @@ public class InsuranceTest {
 
     @Test
     public void testAssignInsuranceToPatient(){
-        Insurance insurance = Insurance.builder().provider("HDFC")
-                .policyNumber("HDFC_oP#rwa)R3r3r342")
+        Insurance insurance = Insurance.builder().provider("HSBC")
+                .policyNumber("HDFC_oP#rwdasdsa)R3r3rdasdas342")
                 .validUntil(LocalDate.of(2029, 1, 1))
                 .build();
         var updatedInsurance = insuranceService.assignInsuranceToPatient(insurance, BigInteger.valueOf(1L));
