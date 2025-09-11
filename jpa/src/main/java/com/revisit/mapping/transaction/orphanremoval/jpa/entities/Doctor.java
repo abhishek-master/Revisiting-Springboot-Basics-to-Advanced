@@ -31,7 +31,7 @@ public class Doctor {
 
     LocalDateTime createdAt ;
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL,orphanRemoval = true)
     Set<Appointment> appointments = new HashSet<>();
 
     @OneToOne(mappedBy = "headDoctor")
