@@ -1,0 +1,42 @@
+# TRANSIENT KEYWORD IN JAVA
+
+The **transient** keyword in Java is used to prevent specific fields of a class from being serialized when an object is converted into a byte stream for storage or transmission.
+
+## Definition and Behavior
+
+- The **transient** modifier is applied to member variables within a class that implements `Serializable`.
+- When an object is serialized, all fields except those marked as transient are saved; transient fields are omitted and assigned their default values upon deserialization (e.g., `null` for objects, `0` for numbers).
+
+## Common Uses
+
+- **Protecting Sensitive Data:** Used to exclude fields such as passwords, security tokens, or confidential information so they aren’t accidentally saved or transmitted.
+- **Excluding Derived or Temporary Data:** Fields whose values can be computed from other serialized data, such as age calculated from date of birth, are often marked transient to avoid storing redundant information.
+- **Avoiding Serialization of Runtime States:** Transient is used for attributes like database connections, file streams, or runtime-only cache fields, that should not be persisted.
+- **Improving Performance:** Reducing the size of serialized objects by excluding unnecessary fields makes serialization faster and uses less storage/bandwidth.
+
+## Syntax Example
+
+```
+class User implements Serializable {
+private String username;
+private transient String password; // Not serialized for security
+private transient int tempValue; // Temporary, not persisted
+}
+```
+
+During serialization of a `User` object, the `password` and `tempValue` fields will not be written to the output stream. Upon deserialization, these fields will take their default values (`null`, `0`).
+
+## Limitations and Notes
+
+- **transient with static/final fields:** Using transient with static or final variables has no impact, as static fields aren’t serialized and final fields are included by value.
+- Only variables (fields) can be transient—methods and classes cannot be marked transient.
+
+## Practical Scenarios
+
+- Financial apps use transient to avoid saving credit card numbers, CVVs, or session tokens.
+- Web and banking systems exclude passwords and sensitive keys from serialized session objects for security compliance.
+- Any field that does not directly contribute to the persistent state but is present for processing or caching should be transient.
+
+---
+
+The **transient** keyword helps Java developers control what data is persisted or transmitted, allowing them to build secure, efficient, and privacy-conscious applications.
