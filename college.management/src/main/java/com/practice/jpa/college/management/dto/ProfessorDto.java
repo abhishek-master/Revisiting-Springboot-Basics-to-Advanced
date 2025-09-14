@@ -9,5 +9,4 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfessorDto {
     String title ;
-    List<SubjectDto> subjects ;
 }

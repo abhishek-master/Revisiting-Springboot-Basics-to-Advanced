@@ -1,18 +1,14 @@
 package com.practice.jpa.college.management.services;
 
-import com.practice.jpa.college.management.dto.StudentDto;
 import com.practice.jpa.college.management.dto.SubjectDto;
 import com.practice.jpa.college.management.dto.UpdateSubjectRequestDto;
 import com.practice.jpa.college.management.entities.Professor;
-import com.practice.jpa.college.management.entities.Student;
 import com.practice.jpa.college.management.entities.Subject;
 import com.practice.jpa.college.management.repository.ProfessorRepository;
 import com.practice.jpa.college.management.repository.SubjectRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
