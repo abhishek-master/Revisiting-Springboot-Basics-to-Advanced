@@ -20,7 +20,7 @@ class SecurityApplicationTests {
 
         System.out.println(token);
 
-        Long id = jwtService.getUserIdFromToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJzaW5oYS5hYmhpc2hlazE4bm92QGdtYWlsLmNvbSIsInJvbGVzIjpbIkFETUlOIiwiVVNFUiJdLCJpYXQiOjE3NTg0NTg5NTcsImV4cCI6MTc1ODQ1OTAxN30.rNwM-leS-54Ek9OBGM26GAebq7C7xOL8s9nRpPcUqYAujzfFGrEY__ILPfMXTbI944XpTZV3nwJfmd-nXAVyYg");
+        Long id = jwtService.getUserIdFromToken(token);
 
         System.out.println("ID :::: " + id);
 	}
