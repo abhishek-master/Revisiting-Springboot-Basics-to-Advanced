@@ -8,12 +8,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
@@ -22,34 +25,43 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver handlerExceptionResolver ;
+
     private final JwtService jwtService ;
     private final UserService userService ;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //Getting the token in the Authorization Header for verification
-        final String requestTokenHeader = request.getHeader("Authorization");
 
-        if(requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer")){
-            filterChain.doFilter(request, response); // to make sure rest filters process in the filter chain
-            return ;
-        }
+        try {
+            final String requestTokenHeader = request.getHeader("Authorization");
 
-        String token = requestTokenHeader.split("Bearer ")[1];
+            if (requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer")) {
+                filterChain.doFilter(request, response); // to make sure rest filters process in the filter chain
+                return;
+            }
 
-        Long userId = jwtService.getUserIdFromToken(token);
-        if(userId != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            User user = userService.getUserById(userId);
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, null) ;
+            String token = requestTokenHeader.split("Bearer ")[1];
+
+            Long userId = jwtService.getUserIdFromToken(token);
+            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                User user = userService.getUserById(userId);
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, null);
 
 //            before we add the authentication token, we can add certain authentication details, like in this case we can pass the
 //            web detail, it contains the IP address, source and other things. Can be helpful, say in case for rate limiting.
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+            // to make sure rest filters process in the filter chain
+            filterChain.doFilter(request, response);
+        }catch(Exception ex){
+            handlerExceptionResolver.resolveException(request, response, null, ex);
         }
-        // to make sure rest filters process in the filter chain
-        filterChain.doFilter(request, response);
 
         //here we can do something with the response, once a request goes through the filter chain it comes back as well.
 

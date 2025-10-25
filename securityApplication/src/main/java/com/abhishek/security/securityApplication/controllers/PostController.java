@@ -29,7 +29,7 @@ public class PostController {
         //We can now get the user from the Security Context and filter out posts based on that.
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("Posts are of the User : {} ", user);
-        return postService.getPostById(postId);
+        return postService.getPostById(postId); //We can do getPostByUsers and use relation between User and Posts to get just the posts by the logged in user
     }
 
     @PostMapping
