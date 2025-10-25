@@ -9,6 +9,7 @@ import com.abhishek.security.securityApplication.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +28,7 @@ public class UserService  implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("User with Email " + username + " not found.")) ;
+        return userRepository.findByEmail(username).orElseThrow(() -> new BadCredentialsException("User with Email " + username + " not found.")) ;
     }
 
     public UserDTO signUp(SignUpDTO signUpDTO) {
@@ -37,6 +38,6 @@ public class UserService  implements UserDetailsService {
     }
 
     public User getUserById(Long userId) {
-        return userRepository.findById(userId).orElseThrow();
+        return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with userID " + userId + " not found."));
     }
 }
