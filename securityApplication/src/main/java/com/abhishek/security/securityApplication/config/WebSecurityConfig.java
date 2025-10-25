@@ -1,6 +1,7 @@
 package com.abhishek.security.securityApplication.config;
 
 import com.abhishek.security.securityApplication.filters.JwtAuthFilter;
+import com.abhishek.security.securityApplication.filters.RequestResponseLoggerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter ;
+    private final RequestResponseLoggerFilter requestResponseLoggerFilter ;
     @Bean
     SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
         /*
@@ -34,7 +36,9 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(requestResponseLoggerFilter, JwtAuthFilter.class);
+
                 //.formLogin(Customizer.withDefaults());
 
         return httpSecurity.build();
