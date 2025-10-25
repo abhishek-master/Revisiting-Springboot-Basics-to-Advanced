@@ -10,6 +10,16 @@ import java.time.LocalDateTime;
 
 /*
 * **********This entity along with all the services and controller is made to understand projection in SpringBoot JPA*******
+It is not required to give the @Column annotation on every field in a JPA entity. By default, JPA will map fields to columns with the same name in the database table following a naming strategy.
+
+Details:
+If you omit @Column, JPA automatically assumes the column name matches the field/property name.
+
+Use @Column when you want to customize the mapping, such as specifying:
+- A different column name (name attribute)
+- Column constraints like nullable, unique, length
+- Precision and scale for numeric columns
+- Insertable/updatable options
 * */
 @Data
 @Entity
