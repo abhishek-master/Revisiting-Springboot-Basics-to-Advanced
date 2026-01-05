@@ -42,16 +42,29 @@ public class JwtService {
         return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8)) ;
     }
 
-    public String generateToken(User user){
+    public String generateAccessToken(User user){
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("email", user.getEmail())
                 .claim("roles", Set.of("ADMIN", "USER"))
                 .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000*20))
+                .signWith(getSecretKey())
+                .compact();
+    }
+
+    //RefreshToken are generally very long loved 3-6 months. And they do not contain much data like roles, or
+    //any other data. They are just there to recreate the accessToken by verification of these via refresh endpoint.
+    public String generateRefreshToken(User user){
+        return Jwts.builder()
+                .subject(user.getId().toString())
+                .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000*60))
                 .signWith(getSecretKey())
                 .compact();
     }
+
+
 
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
