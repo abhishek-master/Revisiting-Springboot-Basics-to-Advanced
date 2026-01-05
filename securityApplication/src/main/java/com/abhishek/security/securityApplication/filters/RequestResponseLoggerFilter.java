@@ -37,8 +37,6 @@ public class RequestResponseLoggerFilter extends OncePerRequestFilter {
             logResponse(contentCachingResponseWrapper, duration);
             contentCachingResponseWrapper.copyBodyToResponse(); //Check the docs _/\_
         }
-
-
     }
 
 

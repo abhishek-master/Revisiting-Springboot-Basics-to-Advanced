@@ -1,5 +1,6 @@
 package com.abhishek.security.securityApplication.config;
 
+import com.abhishek.security.securityApplication.OAuth2SuccessHandler;
 import com.abhishek.security.securityApplication.filters.JwtAuthFilter;
 import com.abhishek.security.securityApplication.filters.RequestResponseLoggerFilter;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter ;
     private final RequestResponseLoggerFilter requestResponseLoggerFilter ;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler ;
     @Bean
     SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
         /*
@@ -31,13 +33,17 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/posts","/auth/**").permitAll()
+                        .requestMatchers( "/posts","/auth/**", "/home.html/**", "/home.html").permitAll()
 //                        .requestMatchers("/posts/**").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(requestResponseLoggerFilter, JwtAuthFilter.class);
+                .addFilterBefore(requestResponseLoggerFilter, JwtAuthFilter.class)
+                .oauth2Login(oauth2Config -> oauth2Config
+                        .failureUrl("/login?error=true")
+                        .successHandler(oAuth2SuccessHandler)
+                );
 
                 //.formLogin(Customizer.withDefaults());
 
