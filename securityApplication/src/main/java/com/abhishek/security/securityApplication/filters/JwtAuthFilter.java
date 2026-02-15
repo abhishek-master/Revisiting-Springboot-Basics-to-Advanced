@@ -46,15 +46,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             String token = requestTokenHeader.split("Bearer ")[1];
 
-            Long userId = jwtService.getUserIdFromToken(token);
+            Long userId = jwtService.getUserIdFromToken(token); //Verifies the token and gets the User detail
             if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = userService.getUserById(userId);
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, null);
+                /*
+                Now you can see we are adding the authorities, and it will be stored in the Security Context. And
+                these authorities will be used to filter which routes and actions a user can access/perform.
+                */
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
-//            before we add the authentication token, we can add certain authentication details, like in this case we can pass the
-//            web detail, it contains the IP address, source and other things. Can be helpful, say in case for rate limiting.
+                /*
+                before we add the authentication token, we can add certain authentication details, like in this case we can pass the
+                web detail (See the below line), it contains the IP address, source and other things. Can be helpful, say in case for rate limiting.
+                * */
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
             // to make sure rest filters process in the filter chain

@@ -1,11 +1,13 @@
 package com.abhishek.security.securityApplication.config;
 
 import com.abhishek.security.securityApplication.OAuth2SuccessHandler;
+import com.abhishek.security.securityApplication.entities.enums.Role;
 import com.abhishek.security.securityApplication.filters.JwtAuthFilter;
 import com.abhishek.security.securityApplication.filters.RequestResponseLoggerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,6 +31,9 @@ public class WebSecurityConfig {
     private final JwtAuthFilter jwtAuthFilter ;
     private final RequestResponseLoggerFilter requestResponseLoggerFilter ;
     private final OAuth2SuccessHandler oAuth2SuccessHandler ;
+    public static final String[] publicRoutes = {
+        "/error", "/auth/**", "/home.html", "/swagger-ui.html"
+    };
     @Bean
     SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
         /*
@@ -39,11 +44,9 @@ public class WebSecurityConfig {
                 .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/posts","/auth/**", "/home.html/**", "/home.html", "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/auth/**").permitAll()
-//                        .requestMatchers("/posts/**").authenticated()
+                        .requestMatchers(publicRoutes).permitAll()
+                        .requestMatchers(HttpMethod.GET,"/posts/**").permitAll() //Permits GET POSTS route for all, but CREATING POST to only ADMIN and CREATOR roles
+                        .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyRole(Role.ADMIN.name(), Role.CREATOR.name())//To give access for a route via role
                         .anyRequest().authenticated())
                 .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
