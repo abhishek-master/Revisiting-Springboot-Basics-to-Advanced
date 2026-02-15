@@ -2,6 +2,7 @@ package com.abhishek.security.securityApplication;
 
 import com.abhishek.security.securityApplication.entities.User;
 import com.abhishek.security.securityApplication.services.JwtService;
+import com.abhishek.security.securityApplication.services.SessionService;
 import com.abhishek.security.securityApplication.services.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -26,6 +27,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final UserService userService;
     private final JwtService jwtService;
+    private final SessionService sessionService ;
 
     @Value("${deploy.environment}")
     private String deployedEnv ;
@@ -47,6 +49,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
+        sessionService.generateNewSession(user, refreshToken);
 
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);

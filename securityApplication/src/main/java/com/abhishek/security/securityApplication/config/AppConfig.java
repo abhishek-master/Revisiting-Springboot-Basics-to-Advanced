@@ -15,8 +15,8 @@ public class AppConfig {
             return new ModelMapper();
         }
 
-    @Bean
-    PasswordEncoder passwordEncoder (){
+     @Bean
+     PasswordEncoder passwordEncoder (){
         return new BCryptPasswordEncoder();
     }
 }
