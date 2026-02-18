@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ import java.io.IOException;
 //Adding a new filter in the Security filter chain of Spring Security [Step 1]
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -61,6 +63,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 * */
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                log.info("Successfully authenticated user with ID: {} and authorities: {}", userId, user.getAuthorities());
             }
             // to make sure rest filters process in the filter chain
             filterChain.doFilter(request, response);

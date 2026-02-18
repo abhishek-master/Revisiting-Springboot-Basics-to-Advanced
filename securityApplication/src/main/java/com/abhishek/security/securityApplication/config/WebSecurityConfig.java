@@ -44,21 +44,26 @@ public class WebSecurityConfig {
                 .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(publicRoutes).permitAll()
-                        .requestMatchers(HttpMethod.GET,"/posts/**").permitAll() //Permits GET POSTS route for all, but CREATING POST to only ADMIN and CREATOR roles
-                        .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyRole(Role.ADMIN.name(), Role.CREATOR.name())//To give access for a route via role
+                        .requestMatchers("/error", "/auth/**", "/home.html", "/swagger-ui.html", "/swagger-ui/**",
+                                "/v3/api-docs/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET,"/posts", "/posts/**")
+                            .hasAnyAuthority("POST_VIEW")
+                        .requestMatchers(HttpMethod.GET,"/posts", "/posts/**")//Permits GET POSTS route for all, but CREATING POST to only ADMIN and CREATOR roles
+                            .hasAnyRole(Role.ADMIN.name(), Role.CREATOR.name())//To give access for a route via role
+                        .requestMatchers(HttpMethod.POST, "/posts", "/posts/**")
+                            .hasAnyAuthority("POST_CREATE")
                         .anyRequest().authenticated())
                 .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(requestResponseLoggerFilter, JwtAuthFilter.class)
-                .oauth2Login(oauth2Config -> oauth2Config
-                        .failureUrl("/login?error=true")
-                        .successHandler(oAuth2SuccessHandler)
-                );
+//                .oauth2Login(oauth2Config -> oauth2Config
+//                        .failureUrl("/login?error=true")
+//                        .successHandler(oAuth2SuccessHandler)
+//                )
+                  ;
                return httpSecurity.build();
-
-                //.formLogin(Customizer.withDefaults());
 }
 
     /*
@@ -99,3 +104,29 @@ public class WebSecurityConfig {
     }
 
 }
+/*
+*Think of Authorities as a way to provide granular -fine level- authorization
+* In Spring boot Roles and Authorities are same but in general way
+
+
+
+Ordering: In your WebSecurityConfig, matchers are evaluated in the order they are written. 
+Since you have .hasAnyRole("ADMIN", "CREATOR") first, and your user has the CREATOR role, 
+access is granted immediately, and the POST_CREATE check is never reached.
+Missing Authorities: Your User.java entity is currently only turning roles into authorities.
+ The permissions list is being ignored, so even if you added POST_CREATE, Spring Security 
+ wouldn't see it yet.
+
+*
+*
+*IN the above example we have roles and permission hardcoded in a real world scenario we can
+* Create a "Roles and Permission" service to facilitate the same. (Check out utils)
+*
+*
+* The annotations related to Spring Security are used to de-clutter this websecurity config.
+* @Secured Annotation can be used at any level at method, at handlers, at controller etc..
+* But a general rule of thumb is to use these on the controller level as we generally
+* restrict users from accessing the endpoints on the High-Level.
+*
+* */
+

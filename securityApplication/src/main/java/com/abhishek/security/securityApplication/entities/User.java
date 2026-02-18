@@ -1,6 +1,8 @@
 package com.abhishek.security.securityApplication.entities;
 
+import com.abhishek.security.securityApplication.entities.enums.Permission;
 import com.abhishek.security.securityApplication.entities.enums.Role;
+import com.abhishek.security.securityApplication.utils.PermissionMapping;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,11 +10,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
+@Table(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,7 +22,6 @@ import java.util.stream.Collectors;
 @ToString
 @Builder
 public class User  implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
@@ -34,18 +35,32 @@ public class User  implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    @Enumerated(EnumType.STRING)
+//    private Set<Permission> permissions ;
+//    Commented out these permissions because we will be using Mapped permission with roles (Check out utils > permissionMapping)
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        /*
-        Authorities means what kind of activities can this user can perform, for now we are just
-        going to store all kind of roles here.
-        Note that we are appending "ROLES_" prefix before roles. In Spring SSecurity we follow this conventions as
-        Roles and Authority are pretty similar.
-        Go to the JWT Auth Filter and see how these authorities are used.
-        * */
-        return roles.stream()
+        Set<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toSet());
+
+        // Add explicit permissions assigned to the user
+//        authorities.addAll(permissions.stream()
+//                .map(permission -> new SimpleGrantedAuthority(permission.name()))
+//                .collect(Collectors.toSet()));
+
+        // Optionally: Add permissions based on roles from PermissionMapping
+        roles.forEach(role -> {
+            Set<Permission> rolePermissions = PermissionMapping.getAuthoritiesForRole(role);
+            authorities.addAll(rolePermissions.stream()
+                    .map(permission -> new SimpleGrantedAuthority(permission.name()))
+                    .collect(Collectors.toList()));
+        });
+
+        return authorities;
     }
 
     @Override
