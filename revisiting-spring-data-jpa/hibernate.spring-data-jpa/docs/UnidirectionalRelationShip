@@ -1,0 +1,128 @@
+I am working with Spring Boot and JPA.
+I have two entities: User and Post.
+A Post has a @ManyToOne relationship with User because multiple posts can belong to a single user.
+
+However, I have not defined a @OneToMany relationship in the User entity.
+
+What will happen in this case?
+
+Will the application still work correctly?
+
+How will the database schema be affected?
+
+What are the limitations of not defining @OneToMany?
+
+When should a bidirectional relationship be preferred?
+
+📄 Markdown Documentation (spring-jpa-unidirectional-many-to-one.md)
+# Unidirectional `@ManyToOne` in Spring Boot JPA
+
+## Overview
+
+In Spring Boot applications using JPA/Hibernate, relationships between entities can be defined as **unidirectional** or **bidirectional**.
+
+This document explains what happens when:
+- A `Post` entity defines a `@ManyToOne` relationship with `User`
+- The `User` entity does **not** define a corresponding `@OneToMany` relationship
+
+---
+
+## Entity Design
+
+### Post Entity (Owning Side)
+
+```java
+@Entity
+public class Post {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+}
+User Entity (No Collection Mapping)
+@Entity
+public class User {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String username;
+}
+What Happens Internally?
+1. Application Behavior
+
+✅ The application works correctly
+✅ Entities are persisted without issues
+✅ Hibernate manages the relationship properly
+
+This works because @ManyToOne is the owning side of the relationship.
+
+2. Database Schema
+
+Hibernate generates:
+
+A posts table
+
+A user_id foreign key column in the posts table
+
+A foreign key constraint referencing the users table
+
+📌 No extra table is created.
+
+3. Relationship Type
+
+This is a Unidirectional Many-to-One relationship:
+
+Navigation is possible from Post → User
+
+Navigation is not possible from User → Post
+
+4. Limitations Without @OneToMany
+
+You cannot do the following:
+
+user.getPosts(); // ❌ Not available
+
+To fetch posts of a user, you must query explicitly:
+
+List<Post> posts = postRepository.findByUser(user);
+
+or
+
+List<Post> posts = postRepository.findByUserId(userId);
+Performance Considerations
+
+✅ Often preferred in real-world applications
+✅ Avoids unnecessary collection loading
+✅ Reduces risk of N+1 query issues
+✅ Keeps entities lightweight and focused
+
+Many production systems intentionally avoid bidirectional mappings unless required.
+
+When to Add @OneToMany
+
+Add a bidirectional mapping only if:
+
+You need navigation from User → Posts
+
+You understand mappedBy, cascading, and fetch strategies
+
+Example:
+
+@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+private List<Post> posts;
+
+⚠ This does NOT create a new database column.
+
+Best Practices
+
+✔ Prefer unidirectional relationships by default
+✔ Add bidirectional mappings only for real use cases
+❌ Avoid adding @OneToMany just for symmetry
+
+JPA relationships should model business access patterns, not just database structure.

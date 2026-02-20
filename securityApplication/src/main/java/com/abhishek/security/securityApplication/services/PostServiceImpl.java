@@ -2,11 +2,13 @@ package com.abhishek.security.securityApplication.services;
 
 import com.abhishek.security.securityApplication.dto.PostDTO;
 import com.abhishek.security.securityApplication.entities.PostEntity;
+import com.abhishek.security.securityApplication.entities.User;
 import com.abhishek.security.securityApplication.exceptions.ResourceNotFoundException;
 import com.abhishek.security.securityApplication.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +35,9 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostDTO createNewPost(PostDTO inputPost) {
-        PostEntity postEntity = modelMapper.map(inputPost, PostEntity.class);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal() ;
+        PostEntity postEntity = modelMapper.map(inputPost, PostEntity.class); //Taking out user from the security context
+        postEntity.setAuthor(user);
         return modelMapper.map(postRepository.save(postEntity), PostDTO.class);
     }
 
