@@ -18,6 +18,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService  implements UserDetailsService {
@@ -32,9 +34,14 @@ public class UserService  implements UserDetailsService {
     }
 
     public UserDTO signUp(SignUpDTO signUpDTO) {
-        signUpDTO.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
-        User user = modelMapper.map(signUpDTO, User.class);
-        return modelMapper.map(userRepository.save(user), UserDTO.class);
+        Optional<User> user = userRepository.findByEmail(signUpDTO.getEmail());
+        if (user.isPresent()) {
+            throw new BadCredentialsException("User with Email already exists "+ signUpDTO.getEmail());
+        }
+
+        User userToBeCreated = modelMapper.map(signUpDTO, User.class);
+        userToBeCreated.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
+        return modelMapper.map(userRepository.save(userToBeCreated), UserDTO.class);
     }
 
     public User getUserById(Long userId) {

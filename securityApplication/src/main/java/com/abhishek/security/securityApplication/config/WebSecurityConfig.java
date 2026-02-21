@@ -33,6 +33,9 @@ public class WebSecurityConfig {
     private final JwtAuthFilter jwtAuthFilter ;
     private final RequestResponseLoggerFilter requestResponseLoggerFilter ;
     private final OAuth2SuccessHandler oAuth2SuccessHandler ;
+    public static final String[] publicRoutes = {
+        "/error", "/auth/**", "/home.html", "/swagger-ui.html"
+    };
     @Bean
     SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
         /*
@@ -63,10 +66,11 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(requestResponseLoggerFilter, JwtAuthFilter.class)
-                .oauth2Login(oauth2Config -> oauth2Config
-                        .failureUrl("/login?error=true")
-                        .successHandler(oAuth2SuccessHandler)
-                );
+//                .oauth2Login(oauth2Config -> oauth2Config
+//                        .failureUrl("/login?error=true")
+//                        .successHandler(oAuth2SuccessHandler)
+//                )
+                  ;
                return httpSecurity.build();
 }
 
