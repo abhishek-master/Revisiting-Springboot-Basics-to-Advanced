@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,6 +27,7 @@ import java.util.List;
 @EnableWebSecurity //This annotation let us tell our Springboot that now we are going to configure the spring security
 //filter chain. It tells that now we will be configuring the security stuff. SecurityFilterChain is one of those things.
 @RequiredArgsConstructor
+@EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter ;
@@ -47,12 +49,18 @@ public class WebSecurityConfig {
                         .requestMatchers("/error", "/auth/**", "/home.html", "/swagger-ui.html", "/swagger-ui/**",
                                 "/v3/api-docs/**")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET,"/posts", "/posts/**")
-                            .hasAnyAuthority("POST_VIEW")
-                        .requestMatchers(HttpMethod.GET,"/posts", "/posts/**")//Permits GET POSTS route for all, but CREATING POST to only ADMIN and CREATOR roles
-                            .hasAnyRole(Role.ADMIN.name(), Role.CREATOR.name())//To give access for a route via role
+//                        .requestMatchers(HttpMethod.GET,"/posts", "/posts/**")
+//                            .hasAnyAuthority("POST_VIEW")
+//                        .requestMatchers(HttpMethod.GET,"/posts", "/posts/**")//Permits GET POSTS route for all, but CREATING POST to only ADMIN and CREATOR roles
+//                        .permitAll()
+                            //.hasAnyRole(Role.ADMIN.name(), Role.CREATOR.name())//To give access for a route via role
                         .requestMatchers(HttpMethod.POST, "/posts", "/posts/**")
                             .hasAnyAuthority("POST_CREATE")
+                        .requestMatchers( "/posts","/auth/**", "/home.html/**", "/home.html", "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/auth/**").permitAll()
+//                        .requestMatchers("/posts/**").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
