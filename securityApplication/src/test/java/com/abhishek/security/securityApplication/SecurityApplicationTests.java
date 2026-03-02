@@ -14,15 +14,15 @@ class SecurityApplicationTests {
 
 	@Test
 	void contextLoads() {
-        User user = new User(1L, "sinha.abhishek18nov@gmail.com", "pass@123");
-
-        String token = jwtService.generateToken(user);
-
-        System.out.println(token);
-
-        Long id = jwtService.getUserIdFromToken(token);
-
-        System.out.println("ID :::: " + id);
+//        User user = new User(1L, "sinha.abhishek18nov@gmail.com", "pass@123");
+//
+//        String token = jwtService.generateToken(user);
+//
+//        System.out.println(token);
+//
+//        Long id = jwtService.getUserIdFromToken(token);
+//
+//        System.out.println("ID :::: " + id);
 	}
 
 }

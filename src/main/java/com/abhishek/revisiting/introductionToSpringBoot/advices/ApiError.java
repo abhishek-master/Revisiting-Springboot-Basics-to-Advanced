@@ -14,3 +14,19 @@ public class ApiError {
     List<String> errors ;
 
 }
+
+/*
+* What @Data does (big picture)
+
+@Data is a shortcut annotation.
+
+It generates all of this at compile time for your class:
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
+
+
+All in one line.*/

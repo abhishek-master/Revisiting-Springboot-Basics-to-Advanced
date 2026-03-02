@@ -1,8 +1,7 @@
 package com.abhishek.security.securityApplication.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.abhishek.security.securityApplication.entities.User;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -11,4 +10,6 @@ public class PostDTO {
     private Long id;
     private String title;
     private String description;
+
+    private User author ;
 }
