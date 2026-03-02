@@ -2,6 +2,7 @@ package com.abhishek.AOP.code;
 
 import com.abhishek.AOP.code.listeners.AnnotationAopTest;
 import com.abhishek.AOP.code.listeners.AopWithinTest;
+import com.abhishek.AOP.code.services.CartService;
 import com.abhishek.AOP.code.services.ShipmentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ class CodeApplicationTests {
 
     @Autowired
     private ShipmentService shipmentService ;
+
+    @Autowired
+    private CartService cartService ;
 
     @Autowired
     private AopWithinTest aopWithinTest ;
@@ -38,6 +42,13 @@ class CodeApplicationTests {
     @Test
     void aopTestAnnotations () {
         annotationAopTest.testAnnotationAop();
+    }
+
+    @Test
+    void aopTestCustomAnnotation(){
+        String temp = cartService.modifyCart(-8L);
+        System.out.println(temp);
+
     }
 
 }

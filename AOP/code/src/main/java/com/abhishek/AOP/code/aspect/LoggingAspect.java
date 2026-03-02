@@ -1,11 +1,12 @@
 package com.abhishek.AOP.code.aspect;
 
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
-@Aspect
+//@Aspect
 @Component
 @Slf4j
 public class LoggingAspect {
@@ -59,6 +60,11 @@ public class LoggingAspect {
     @Before("@annotation(org.springframework.transaction.annotation.Transactional)")
     public void logTransactionalMethods(){
         log.info("I was called before all methods annotated by transactional !!!");
+    }
+
+    @After("@annotation(com.abhishek.AOP.code.CustomAnnotation)")
+    public void logCustomAnnotaton(){
+        log.info("I was called after method annotated with CUSTOM ANNOTATION was executed.");
     }
 
 
