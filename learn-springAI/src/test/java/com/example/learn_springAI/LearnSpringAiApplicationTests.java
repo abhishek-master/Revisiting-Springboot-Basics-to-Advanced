@@ -27,4 +27,10 @@ class LearnSpringAiApplicationTests {
         System.out.println(aiDiagnosis);
     }
 
+    @Test
+    public void testtestgetAiMedicalSuggestionParsed(){
+        var aiDiagnosis = aiService.getAiMedicalSuggestionsParsed("45", "Non-vegeterain and Heavy drinks on regular basis", "Goa", "Heart palpitations (sudden irregular beats), sharp stabbing pain in the chest for short intervals, fatigue, and dizziness.");
+        System.out.println(aiDiagnosis);
+    }
+
 }
