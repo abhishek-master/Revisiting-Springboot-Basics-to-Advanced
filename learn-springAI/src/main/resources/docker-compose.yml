@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: pgvector-local
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
+    ports:
+      - "5435:5432"   # host:container
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+# Root-level volumes definition
+volumes:
+  pgdata:
