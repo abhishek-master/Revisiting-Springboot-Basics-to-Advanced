@@ -32,7 +32,7 @@ public class VectorEmbedding {
     public void ingestDataToVectorStore(String text){
         //We can provide our Document with a map, and this map act as metadata in the vector store database.
         //When you add these documents they will be saved/added/ingested parallely, that is you add 1 Document or List
-        // of 10 document, they are not added one at a time but parallaly added using threads.
+        // of 10 document, they are not added one at a time but parallely  added using threads.
 
         //Using metadata (here Map.of(K, V)) in here is that we can use is to filter more result.  Like let's say we need
         //a movie of the genre "Action" so in this case metadata comes handy.
